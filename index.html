@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>복서의 전설</title>
+  <!-- 부트스트랩 CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    body {
+      background-color: #222;
+      color: #feda4a;
+      font-family: 'Helvetica', sans-serif;
+    }
+    .card {
+      background-color: #333;
+      border: none;
+    }
+    .card-text p {
+      font-size: 1.1em;
+      line-height: 1.5em;
+    }
+    .form-control, .btn {
+      font-size: 1.1em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-4">
+    <!-- 상단 스토리 설명 카드 -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <h2 class="card-title text-center">복서의 전설</h2>
+        <div class="card-text">
+          <p>어둠이 내려앉은 도시의 한 구석, 복싱 링은 빛과 그림자가 공존하는 전장의 현장이었다. 🥊</p>
+          <p>어린 시절부터 주먹에 희망을 품은 한 소년은, 가난과 역경의 굴레 속에서도 오직 꿈만을 바라보며 수많은 시련을 견뎌냈다. 그의 주먹은 단순한 힘을 넘어, 가족의 사랑과 동료들의 격려가 담긴 소중한 무기가 되었다. 💪</p>
+          <p>매 경기마다 그의 열정은 더욱 뜨겁게 타올랐고, 관중들은 그의 도전과 승리의 순간에 환호하며 미래의 전설을 기대했다. 🔥</p>
+          <p>수많은 패배와 실패를 딛고, 마침내 그는 불멸의 전설을 향한 첫 걸음을 내디뎠다. 오늘 밤, 복싱 링 위에서 펼쳐질 그의 불꽃 같은 투지는 모든 이들에게 희망과 용기를 선사할 것이다. 🌟</p>
+          <p>이제 당신의 이름으로 새로운 전설을 시작해보세요!</p>
+        </div>
+      </div>
+    </div>
+    <!-- 복서 이름 선택 카드 -->
+    <div class="card">
+      <div class="card-body text-center">
+        <div class="row justify-content-center">
+          <div class="col-10 col-sm-8 col-md-6">
+            <input type="text" id="boxerName" class="form-control mb-3" placeholder="복서 이름을 입력하세요">
+            <button id="selectBoxer" class="btn btn-primary btn-block">복서 선택 🥊</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <!-- 부트스트랩 JS 및 의존성 (옵션) -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
