@@ -70,12 +70,13 @@ document.addEventListener("DOMContentLoaded", function() {
     // 스탯 정보를 텍스트로 표시 (구간 포함)
     function updateStatDisplay() {
       var nextLevelExp = getRequiredExp(boxerStats.level);
-      document.getElementById("statInfo").innerText = 
-        "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
-        "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
-        "경험치: " + boxerStats.experience + "/" + nextLevelExp;
       
-      // 레벨 표시 업데이트
+      // 스탯 정보 업데이트
+      document.getElementById("attackStat").innerText = boxerStats.attack;
+      document.getElementById("attackRange").innerText = "(" + getStatRange(boxerStats.attack) + ")";
+      document.getElementById("defenseStat").innerText = boxerStats.defense;
+      document.getElementById("defenseRange").innerText = "(" + getStatRange(boxerStats.defense) + ")";
+      document.getElementById("expStat").innerText = boxerStats.experience + "/" + nextLevelExp;
       document.getElementById("levelNumber").innerText = boxerStats.level;
       
       // 차트 업데이트

@@ -121,6 +121,55 @@
       color: #fff;
       text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
+    .stat-display {
+      flex: 1;
+      margin-right: 10px;
+    }
+    .stat-row {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;
+      font-size: 0.9em;
+    }
+    .stat-label {
+      width: 60px;
+      color: #feda4a;
+    }
+    .stat-value {
+      margin: 0 5px;
+      color: #fff;
+      font-weight: 600;
+    }
+    .stat-range {
+      color: #28a745;
+      font-size: 0.9em;
+    }
+    .chart-container-small {
+      position: relative;
+      height: 150px;
+    }
+    .opponent-list {
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .opponent-table {
+      margin-bottom: 0;
+    }
+    .opponent-table th {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.1);
+      z-index: 1;
+    }
+    .match-logs {
+      max-height: 150px;
+    }
+    .level-display {
+      min-width: 80px;
+    }
+    .level-number {
+      font-size: 2em;
+    }
     @media (max-width: 768px) {
       .dashboard-title {
         font-size: 2em;
@@ -138,6 +187,15 @@
       .stat-info {
         font-size: 1em;
       }
+      .stat-row {
+        font-size: 0.8em;
+      }
+      .stat-label {
+        width: 50px;
+      }
+      .level-number {
+        font-size: 1.8em;
+      }
     }
   </style>
 </head>
@@ -147,12 +205,26 @@
     
     <div class="row">
       <!-- 스탯 정보 -->
-      <div class="col-12 col-lg-8">
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">스탯 정보</h5>
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="card-body p-2">
             <div class="d-flex justify-content-between align-items-center">
-              <p id="statInfo" class="stat-info mb-0"></p>
+              <div class="stat-display">
+                <div class="stat-row">
+                  <span class="stat-label">공격력:</span>
+                  <span id="attackStat" class="stat-value">50</span>
+                  <span id="attackRange" class="stat-range">(D급)</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">방어력:</span>
+                  <span id="defenseStat" class="stat-value">40</span>
+                  <span id="defenseRange" class="stat-range">(F급)</span>
+                </div>
+                <div class="stat-row">
+                  <span class="stat-label">경험치:</span>
+                  <span id="expStat" class="stat-value">0/50</span>
+                </div>
+              </div>
               <div class="level-display">
                 <span class="level-label">레벨</span>
                 <span id="levelNumber" class="level-number">1</span>
@@ -160,32 +232,38 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
 
-        <!-- 스탯 차트 -->
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">스탯 차트</h5>
-            <div class="chart-container">
+    <div class="row">
+      <!-- 스탯 차트 -->
+      <div class="col-6">
+        <div class="card mb-3">
+          <div class="card-body p-2">
+            <div class="chart-container-small">
               <canvas id="statsChart"></canvas>
-            </div>
-          </div>
-        </div>
-
-        <!-- 경험치 차트 -->
-        <div class="card mb-4">
-          <div class="card-body">
-            <h5 class="card-title">경험치 차트</h5>
-            <div class="chart-container">
-              <canvas id="expChart"></canvas>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- 경험치 차트 -->
+      <div class="col-6">
+        <div class="card mb-3">
+          <div class="card-body p-2">
+            <div class="chart-container-small">
+              <canvas id="expChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
       <!-- 경기 로그 -->
-      <div class="col-12 col-lg-4">
-        <div class="card mb-4">
-          <div class="card-header">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="card-header p-2">
             <h5 class="card-title mb-0">경기 로그</h5>
           </div>
           <div class="card-body p-0">
@@ -198,37 +276,37 @@
     <!-- 상대 목록 -->
     <div class="row">
       <!-- 쉬움 난이도 -->
-      <div class="col-12 col-md-4">
-        <div class="card mb-4">
-          <div class="card-header">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="card-header p-2">
             <h5 class="card-title mb-0 difficulty-easy">애송이 난이도</h5>
           </div>
-          <div class="card-body">
-            <div id="easyOpponents"></div>
+          <div class="card-body p-0">
+            <div id="easyOpponents" class="opponent-list"></div>
           </div>
         </div>
       </div>
 
       <!-- 중간 난이도 -->
-      <div class="col-12 col-md-4">
-        <div class="card mb-4">
-          <div class="card-header">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="card-header p-2">
             <h5 class="card-title mb-0 difficulty-medium">중급 난이도</h5>
           </div>
-          <div class="card-body">
-            <div id="mediumOpponents"></div>
+          <div class="card-body p-0">
+            <div id="mediumOpponents" class="opponent-list"></div>
           </div>
         </div>
       </div>
 
       <!-- 어려움 난이도 -->
-      <div class="col-12 col-md-4">
-        <div class="card mb-4">
-          <div class="card-header">
+      <div class="col-12">
+        <div class="card mb-3">
+          <div class="card-header p-2">
             <h5 class="card-title mb-0 difficulty-hard">상급 난이도</h5>
           </div>
-          <div class="card-body">
-            <div id="hardOpponents"></div>
+          <div class="card-body p-0">
+            <div id="hardOpponents" class="opponent-list"></div>
           </div>
         </div>
       </div>
