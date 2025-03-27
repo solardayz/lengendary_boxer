@@ -417,7 +417,21 @@ document.addEventListener("DOMContentLoaded", function() {
           gainExperience(expGain);
 
           // 골드 획득
-          var goldGain = Math.floor((opponentAttack + opponentDefense) / 10) * 10;
+          var goldGain;
+          switch(difficulty) {
+            case 'easy':
+              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 5; // 기본 5-10 골드
+              break;
+            case 'medium':
+              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 10; // 기본 10-20 골드
+              break;
+            case 'hard':
+              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 15; // 기본 15-30 골드
+              break;
+            default:
+              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 5;
+          }
+
           if (boxerStats.goldBoost) {
             goldGain *= 2;
             boxerStats.goldBoost = false;
