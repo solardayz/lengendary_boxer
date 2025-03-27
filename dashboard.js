@@ -3,13 +3,18 @@ document.addEventListener("DOMContentLoaded", function() {
     var boxerName = localStorage.getItem("boxerName") || "Unknown Boxer";
     document.getElementById("dashboardTitle").innerText = boxerName + "의 대시보드";
     
-    // 복서의 기본 스탯 (예시 값)
-    var boxerStats = {
+    // 로컬 스토리지에서 복서 스탯 가져오기
+    var boxerStats = JSON.parse(localStorage.getItem("boxerStats")) || {
       attack: 50,
       defense: 40,
       experience: 0,
       level: 1
     };
+
+    // 스탯 저장 함수
+    function saveStats() {
+      localStorage.setItem("boxerStats", JSON.stringify(boxerStats));
+    }
   
     // 스탯 구간 계산 함수
     function getStatRange(stat) {
@@ -22,10 +27,15 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   
     // 스탯 정보를 텍스트로 표시 (구간 포함)
-    document.getElementById("statInfo").innerText = 
-      "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
-      "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
-      "경험치: " + boxerStats.experience + "/" + (boxerStats.level * 100) + ", 레벨: " + boxerStats.level;
+    function updateStatDisplay() {
+      document.getElementById("statInfo").innerText = 
+        "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
+        "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
+        "경험치: " + boxerStats.experience + "/" + (boxerStats.level * 100) + ", 레벨: " + boxerStats.level;
+    }
+
+    // 초기 스탯 표시
+    updateStatDisplay();
   
     // Chart.js로 스탯 그래프 그리기 (바 차트)
     var ctx = document.getElementById('statsChart').getContext('2d');
@@ -157,14 +167,14 @@ document.addEventListener("DOMContentLoaded", function() {
         addMatchLog(levelUpMessage);
         
         // 스탯 정보 업데이트
-        document.getElementById("statInfo").innerText = 
-          "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
-          "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
-          "경험치: " + boxerStats.experience + "/" + (boxerStats.level * 100) + ", 레벨: " + boxerStats.level;
+        updateStatDisplay();
         
         // 차트 업데이트
         statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.experience, boxerStats.level];
         statsChart.update();
+
+        // 스탯 저장
+        saveStats();
       }
     }
   
@@ -191,6 +201,16 @@ document.addEventListener("DOMContentLoaded", function() {
           var expGain = calculateExpGain(opponentAttack, opponentDefense);
           boxerStats.experience += expGain;
           addMatchLog(`경험치 ${expGain} 획득! (기본: 20, 난이도 보너스: ${expGain - 20})`);
+          
+          // 스탯 정보 업데이트
+          updateStatDisplay();
+          
+          // 차트 업데이트
+          statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.experience, boxerStats.level];
+          statsChart.update();
+
+          // 스탯 저장
+          saveStats();
           
           // 레벨업 체크
           checkLevelUp();
