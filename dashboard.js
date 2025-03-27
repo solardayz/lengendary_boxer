@@ -212,7 +212,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // 로그 표시 함수
-    function addMatchLog(message) {
+    function addMatchLog(message, type = '') {
       matchLogs.unshift(message); // 새로운 로그를 배열 앞에 추가
       if (matchLogs.length > 20) { // 최대 20개 로그만 보관
         matchLogs.pop();
@@ -233,7 +233,19 @@ document.addEventListener("DOMContentLoaded", function() {
         logContainer = container;
       }
       
-      logContainer.innerHTML = matchLogs.map(log => `<div>${log}</div>`).join("");
+      logContainer.innerHTML = matchLogs.map(log => {
+        let time = log.match(/\[(.*?)\]/);
+        let timeHtml = time ? `<span class="log-time">[${time[1]}]</span> ` : '';
+        let content = time ? log.replace(/\[.*?\]/, '').trim() : log;
+        
+        let className = '';
+        if (content.includes('승리')) className = 'log-win';
+        else if (content.includes('패배')) className = 'log-lose';
+        else if (content.includes('레벨업')) className = 'log-levelup';
+        else if (content.includes('경험치')) className = 'log-exp';
+        
+        return `<div class="${className}">${timeHtml}${content}</div>`;
+      }).join("");
     }
 
     // 초기 로그 불러오기
@@ -242,7 +254,19 @@ document.addEventListener("DOMContentLoaded", function() {
     // 로그 초기 표시
     var logContainer = document.getElementById("matchLogs");
     if (logContainer) {
-      logContainer.innerHTML = matchLogs.map(log => `<div>${log}</div>`).join("");
+      logContainer.innerHTML = matchLogs.map(log => {
+        let time = log.match(/\[(.*?)\]/);
+        let timeHtml = time ? `<span class="log-time">[${time[1]}]</span> ` : '';
+        let content = time ? log.replace(/\[.*?\]/, '').trim() : log;
+        
+        let className = '';
+        if (content.includes('승리')) className = 'log-win';
+        else if (content.includes('패배')) className = 'log-lose';
+        else if (content.includes('레벨업')) className = 'log-levelup';
+        else if (content.includes('경험치')) className = 'log-exp';
+        
+        return `<div class="${className}">${timeHtml}${content}</div>`;
+      }).join("");
     }
   
     // 난이도별 승리 횟수 추적
