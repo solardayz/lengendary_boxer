@@ -78,6 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
       try {
         localStorage.setItem("boxerStats", JSON.stringify(boxerStats));
         console.log("스탯 저장 완료:", boxerStats);
+        updateStatDisplay();
       } catch (error) {
         console.error("스탯 저장 실패:", error);
       }
@@ -134,13 +135,14 @@ document.addEventListener("DOMContentLoaded", function() {
       var nextLevelExp = getRequiredExp(boxerStats.level);
       
       // 스탯 정보 업데이트
-      document.getElementById("attackStat").innerText = boxerStats.attack;
+      document.getElementById("attackValue").textContent = boxerStats.attack;
+      document.getElementById("defenseValue").textContent = boxerStats.defense;
+      document.getElementById("levelValue").textContent = boxerStats.level;
+      document.getElementById("experienceValue").textContent = boxerStats.experience;
+      document.getElementById("goldAmount").textContent = boxerStats.gold || 0;
       document.getElementById("attackRange").innerText = "(" + getStatRange(boxerStats.attack) + ")";
-      document.getElementById("defenseStat").innerText = boxerStats.defense;
       document.getElementById("defenseRange").innerText = "(" + getStatRange(boxerStats.defense) + ")";
       document.getElementById("expStat").innerText = boxerStats.experience + "/" + nextLevelExp;
-      document.getElementById("levelNumber").innerText = boxerStats.level;
-      document.getElementById("goldAmount").textContent = boxerStats.gold;
       
       // 차트 업데이트
       statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense];
@@ -524,5 +526,10 @@ document.addEventListener("DOMContentLoaded", function() {
       var difficultyBonus = Math.floor((opponentAttack + opponentDefense) / 20);
       return baseExp + difficultyBonus;
     }
+
+    // 초기화
+    updateStatDisplay();
+    updateMatchLog();
+    checkLevel30();
   });
   
