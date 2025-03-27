@@ -124,6 +124,7 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("defenseRange").innerText = "(" + getStatRange(boxerStats.defense) + ")";
       document.getElementById("expStat").innerText = boxerStats.experience + "/" + nextLevelExp;
       document.getElementById("levelNumber").innerText = boxerStats.level;
+      document.getElementById("goldAmount").textContent = boxerStats.gold;
       
       // 차트 업데이트
       statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense];

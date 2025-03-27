@@ -256,20 +256,17 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        // 구매 확인
-        if (confirm(`${item.name}을(를) ${item.price}골드에 구매하시겠습니까?`)) {
-            // 구매 처리
-            boxerStats.gold -= item.price;
-            boxerStats.purchasedItems[item.id] = true;
-            
-            // 효과 적용
-            item.effect();
-            
-            // 상태 저장 및 UI 업데이트
-            saveStats();
-            updateGoldDisplay();
-            renderShopItems(itemCategory);
-        }
+        // 구매 처리
+        boxerStats.gold -= item.price;
+        boxerStats.purchasedItems[item.id] = true;
+        
+        // 효과 적용
+        item.effect();
+        
+        // 상태 저장 및 UI 업데이트
+        saveStats();
+        updateGoldDisplay();
+        renderShopItems(itemCategory);
     };
 
     // 초기화
