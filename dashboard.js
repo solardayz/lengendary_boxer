@@ -15,6 +15,19 @@ document.addEventListener("DOMContentLoaded", function() {
     function saveStats() {
       localStorage.setItem("boxerStats", JSON.stringify(boxerStats));
     }
+
+    // 레벨별 필요 경험치 계산 함수
+    function getRequiredExp(level) {
+      return Math.floor(100 * Math.pow(1.5, level - 1));
+    }
+
+    // 레벨별 스탯 증가량 계산 함수
+    function getStatIncrease(level) {
+      return {
+        attack: Math.floor(5 + level * 0.5),
+        defense: Math.floor(4 + level * 0.4)
+      };
+    }
   
     // 스탯 구간 계산 함수
     function getStatRange(stat) {
@@ -28,10 +41,11 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // 스탯 정보를 텍스트로 표시 (구간 포함)
     function updateStatDisplay() {
+      var nextLevelExp = getRequiredExp(boxerStats.level);
       document.getElementById("statInfo").innerText = 
         "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
         "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
-        "경험치: " + boxerStats.experience + "/" + (boxerStats.level * 100) + ", 레벨: " + boxerStats.level;
+        "경험치: " + boxerStats.experience + "/" + nextLevelExp + ", 레벨: " + boxerStats.level;
     }
 
     // 초기 스탯 표시
