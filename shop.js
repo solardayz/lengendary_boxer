@@ -87,23 +87,35 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 골드 표시 업데이트
     function updateGoldDisplay() {
-        document.getElementById('goldAmount').textContent = boxerStats.gold;
+        const goldDisplay = document.getElementById('goldAmount');
+        if (goldDisplay) {
+            goldDisplay.textContent = boxerStats.gold;
+        }
+    }
+
+    // 아이템 구매 가능 여부 확인
+    function canPurchaseItem(item) {
+        return boxerStats.gold >= item.price && !boxerStats.purchasedItems[item.id];
     }
 
     // 상점 아이템 렌더링
     function renderShopItems(category) {
-        const items = shopItems[category];
         const container = document.getElementById('shopItems');
+        if (!container) return;
+
+        const items = shopItems[category] || [];
         container.innerHTML = items.map(item => {
-            const isPurchased = boxerStats.purchasedItems[item.id];
+            const purchased = boxerStats.purchasedItems[item.id] || false;
+            const canPurchase = canPurchaseItem(item);
+            
             return `
                 <div class="shop-item">
                     <div class="shop-item-name">${item.name}</div>
                     <div class="shop-item-price">${item.price} 골드</div>
                     <div class="shop-item-description">${item.description}</div>
                     <button class="btn btn-buy" onclick="purchaseItem('${item.id}')"
-                            ${boxerStats.gold < item.price || isPurchased ? 'disabled' : ''}>
-                        ${isPurchased ? '구매 완료' : '구매'}
+                            ${!canPurchase ? 'disabled' : ''}>
+                        ${purchased ? '구매 완료' : '구매'}
                     </button>
                 </div>
             `;
@@ -121,21 +133,47 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 아이템 구매 함수
     window.purchaseItem = function(itemId) {
-        let item;
+        let item = null;
+        let itemCategory = null;
+
+        // 아이템 찾기
         for (const category in shopItems) {
-            item = shopItems[category].find(i => i.id === itemId);
-            if (item) break;
+            const foundItem = shopItems[category].find(i => i.id === itemId);
+            if (foundItem) {
+                item = foundItem;
+                itemCategory = category;
+                break;
+            }
         }
 
-        if (item && boxerStats.gold >= item.price && !boxerStats.purchasedItems[item.id]) {
-            if (confirm(`${item.name}을(를) ${item.price}골드에 구매하시겠습니까?`)) {
-                boxerStats.gold -= item.price;
-                boxerStats.purchasedItems[item.id] = true; // 구매 상태 저장
-                item.effect();
-                saveStats();
-                updateGoldDisplay();
-                renderShopItems(document.querySelector('.category-btn.active').dataset.category);
+        if (!item) {
+            console.error('아이템을 찾을 수 없습니다:', itemId);
+            return;
+        }
+
+        // 구매 가능 여부 확인
+        if (!canPurchaseItem(item)) {
+            if (boxerStats.purchasedItems[item.id]) {
+                alert('이미 구매한 아이템입니다.');
+            } else {
+                alert('골드가 부족합니다.');
             }
+            return;
+        }
+
+        // 구매 확인
+        if (confirm(`${item.name}을(를) ${item.price}골드에 구매하시겠습니까?`)) {
+            // 구매 처리
+            boxerStats.gold -= item.price;
+            boxerStats.purchasedItems[item.id] = true;
+            
+            // 효과 적용
+            item.effect();
+            
+            // 상태 저장 및 UI 업데이트
+            saveStats();
+            updateGoldDisplay();
+            renderShopItems(itemCategory);
         }
     };
 
