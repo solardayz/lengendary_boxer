@@ -18,7 +18,30 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 레벨별 필요 경험치 계산 함수
     function getRequiredExp(level) {
-      return level * 10; // 1렙: 10, 2렙: 20, 3렙: 30, ...
+      // 1-5레벨: 50씩 증가
+      if (level <= 5) {
+        return 50 * level;
+      }
+      // 6-10레벨: 100씩 증가
+      else if (level <= 10) {
+        return 250 + (level - 5) * 100;
+      }
+      // 11-15레벨: 150씩 증가
+      else if (level <= 15) {
+        return 750 + (level - 10) * 150;
+      }
+      // 16-20레벨: 200씩 증가
+      else if (level <= 20) {
+        return 1500 + (level - 15) * 200;
+      }
+      // 21-25레벨: 250씩 증가
+      else if (level <= 25) {
+        return 2500 + (level - 20) * 250;
+      }
+      // 26-30레벨: 300씩 증가
+      else {
+        return 3750 + (level - 25) * 300;
+      }
     }
 
     // 레벨별 스탯 증가량 계산 함수
@@ -208,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // 레벨업 함수
     function checkLevelUp() {
-      var nextLevelExp = boxerStats.level * 100;
+      var nextLevelExp = getRequiredExp(boxerStats.level);
       if (boxerStats.experience >= nextLevelExp) {
         boxerStats.level += 1;
         boxerStats.attack += 5;
@@ -233,16 +256,16 @@ document.addEventListener("DOMContentLoaded", function() {
       var baseExp;
       switch(difficulty) {
         case 'easy':
-          baseExp = 5;
+          baseExp = 15; // 애송이 난이도
           break;
         case 'medium':
-          baseExp = 10;
+          baseExp = 30; // 중급 난이도
           break;
         case 'hard':
-          baseExp = 15;
+          baseExp = 50; // 상급 난이도
           break;
         default:
-          baseExp = 5;
+          baseExp = 15;
       }
       var difficultyBonus = Math.floor((opponentAttack + opponentDefense) / 20);
       return baseExp + difficultyBonus;
