@@ -109,8 +109,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 description: '애송이 난이도의 모든 상대를 이기세요.',
                 icon: '🥊',
                 reward: '300 골드',
-                check: () => boxerStats.achievements.easy_all || boxerStats.difficultyWins.easy >= 3,
-                progress: () => Math.min((boxerStats.difficultyWins.easy / 3) * 100, 100),
+                check: () => boxerStats.achievements.easy_all || (boxerStats.difficultyWins && boxerStats.difficultyWins.easy >= 3),
+                progress: () => Math.min(((boxerStats.difficultyWins && boxerStats.difficultyWins.easy) || 0) / 3 * 100, 100),
                 rewardFunction: () => {
                     boxerStats.gold += 300;
                     addMatchLog('애송이 난이도 정복! 300 골드를 획득했습니다.');
@@ -122,8 +122,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 description: '중급 난이도의 모든 상대를 이기세요.',
                 icon: '🥊',
                 reward: '600 골드',
-                check: () => boxerStats.achievements.medium_all || boxerStats.difficultyWins.medium >= 3,
-                progress: () => Math.min((boxerStats.difficultyWins.medium / 3) * 100, 100),
+                check: () => boxerStats.achievements.medium_all || (boxerStats.difficultyWins && boxerStats.difficultyWins.medium >= 3),
+                progress: () => Math.min(((boxerStats.difficultyWins && boxerStats.difficultyWins.medium) || 0) / 3 * 100, 100),
                 rewardFunction: () => {
                     boxerStats.gold += 600;
                     addMatchLog('중급 난이도 정복! 600 골드를 획득했습니다.');
@@ -135,8 +135,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 description: '상급 난이도의 모든 상대를 이기세요.',
                 icon: '🥊',
                 reward: '1000 골드',
-                check: () => boxerStats.achievements.hard_all || boxerStats.difficultyWins.hard >= 3,
-                progress: () => Math.min((boxerStats.difficultyWins.hard / 3) * 100, 100),
+                check: () => boxerStats.achievements.hard_all || (boxerStats.difficultyWins && boxerStats.difficultyWins.hard >= 3),
+                progress: () => Math.min(((boxerStats.difficultyWins && boxerStats.difficultyWins.hard) || 0) / 3 * 100, 100),
                 rewardFunction: () => {
                     boxerStats.gold += 1000;
                     addMatchLog('상급 난이도 정복! 1000 골드를 획득했습니다.');
