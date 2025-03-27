@@ -486,8 +486,5 @@ document.addEventListener("DOMContentLoaded", function() {
       var difficultyBonus = Math.floor((opponentAttack + opponentDefense) / 20);
       return baseExp + difficultyBonus;
     }
-
-    // 초기화
-    initializeShop();
   });
   
