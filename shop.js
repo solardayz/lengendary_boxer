@@ -63,13 +63,103 @@ document.addEventListener("DOMContentLoaded", function() {
         ],
         cosmetic: [
             {
-                id: 'champion_title',
-                name: '챔피언 칭호',
+                id: 'rookie_title',
+                name: '신인 복서',
+                price: 100,
+                description: '당신의 이름 앞에 "신인" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '신인';
+                    addMatchLog('신인 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'promising_title',
+                name: '유망주',
+                price: 200,
+                description: '당신의 이름 앞에 "유망주" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '유망주';
+                    addMatchLog('유망주 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'rising_star_title',
+                name: '떠오르는 별',
+                price: 300,
+                description: '당신의 이름 앞에 "떠오르는 별" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '떠오르는 별';
+                    addMatchLog('떠오르는 별 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'elite_title',
+                name: '정예 복서',
+                price: 400,
+                description: '당신의 이름 앞에 "정예" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '정예';
+                    addMatchLog('정예 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'master_title',
+                name: '마스터 복서',
                 price: 500,
+                description: '당신의 이름 앞에 "마스터" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '마스터';
+                    addMatchLog('마스터 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'champion_title',
+                name: '챔피언',
+                price: 1000,
                 description: '당신의 이름 앞에 "챔피언" 칭호가 붙습니다.',
                 effect: () => {
                     boxerStats.title = '챔피언';
                     addMatchLog('챔피언 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'legend_title',
+                name: '전설의 복서',
+                price: 2000,
+                description: '당신의 이름 앞에 "전설" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '전설';
+                    addMatchLog('전설의 복서 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'immortal_title',
+                name: '불멸의 복서',
+                price: 3000,
+                description: '당신의 이름 앞에 "불멸" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '불멸';
+                    addMatchLog('불멸의 복서 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'god_title',
+                name: '신의 복서',
+                price: 5000,
+                description: '당신의 이름 앞에 "신" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '신';
+                    addMatchLog('신의 복서 칭호를 획득했습니다!', 'log-levelup');
+                }
+            },
+            {
+                id: 'emperor_title',
+                name: '황제의 복서',
+                price: 10000,
+                description: '당신의 이름 앞에 "황제" 칭호가 붙습니다.',
+                effect: () => {
+                    boxerStats.title = '황제';
+                    addMatchLog('황제의 복서 칭호를 획득했습니다!', 'log-levelup');
                 }
             }
         ]
