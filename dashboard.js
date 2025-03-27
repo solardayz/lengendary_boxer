@@ -69,6 +69,13 @@ document.addEventListener("DOMContentLoaded", function() {
         "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
         "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
         "경험치: " + boxerStats.experience + "/" + nextLevelExp + ", 레벨: " + boxerStats.level;
+      
+      // 차트 업데이트
+      statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.level];
+      statsChart.update();
+      
+      expChart.data.datasets[0].data = [boxerStats.experience, nextLevelExp];
+      expChart.update();
     }
 
     // 초기 스탯 표시
@@ -79,25 +86,56 @@ document.addEventListener("DOMContentLoaded", function() {
     var statsChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['공격력', '방어력', '경험치', '레벨'],
+        labels: ['공격력', '방어력', '레벨'],
         datasets: [{
           label: '스탯',
-          data: [boxerStats.attack, boxerStats.defense, boxerStats.experience, boxerStats.level],
+          data: [boxerStats.attack, boxerStats.defense, boxerStats.level],
           backgroundColor: [
             'rgba(255, 99, 132, 0.6)',
             'rgba(54, 162, 235, 0.6)',
-            'rgba(255, 206, 86, 0.6)',
             'rgba(75, 192, 192, 0.6)'
           ],
           borderWidth: 1
         }]
       },
       options: {
+        responsive: true,
+        maintainAspectRatio: false,
         scales: {
           y: { 
             beginAtZero: true,
             ticks: {
               stepSize: 10
+            }
+          }
+        }
+      }
+    });
+  
+    // 경험치 차트
+    var expCtx = document.getElementById('expChart').getContext('2d');
+    var expChart = new Chart(expCtx, {
+      type: 'bar',
+      data: {
+        labels: ['현재 경험치', '다음 레벨까지'],
+        datasets: [{
+          label: '경험치',
+          data: [boxerStats.experience, getRequiredExp(boxerStats.level)],
+          backgroundColor: [
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(153, 102, 255, 0.6)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { 
+            beginAtZero: true,
+            ticks: {
+              stepSize: 50
             }
           }
         }
@@ -243,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function() {
         updateStatDisplay();
         
         // 차트 업데이트
-        statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.experience, boxerStats.level];
+        statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.level];
         statsChart.update();
 
         // 스탯 저장
@@ -317,7 +355,7 @@ document.addEventListener("DOMContentLoaded", function() {
           updateStatDisplay();
           
           // 차트 업데이트
-          statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.experience, boxerStats.level];
+          statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.level];
           statsChart.update();
 
           // 스탯 저장

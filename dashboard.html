@@ -96,6 +96,11 @@
     .difficulty-easy { color: #28a745; }
     .difficulty-medium { color: #ffc107; }
     .difficulty-hard { color: #dc3545; }
+    .chart-container {
+      position: relative;
+      height: 300px;
+      margin-bottom: 20px;
+    }
   </style>
 </head>
 <body class="text-light">
@@ -117,7 +122,19 @@
         <div class="card mb-4">
           <div class="card-body">
             <h5 class="card-title">스탯 차트</h5>
-            <canvas id="statsChart"></canvas>
+            <div class="chart-container">
+              <canvas id="statsChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- 경험치 차트 -->
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">경험치 차트</h5>
+            <div class="chart-container">
+              <canvas id="expChart"></canvas>
+            </div>
           </div>
         </div>
       </div>
