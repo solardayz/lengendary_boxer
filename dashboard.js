@@ -294,13 +294,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 레벨업 함수
     function checkLevelUp() {
+      // 최고 레벨 체크
+      if (boxerStats.level >= 30) {
+        addMatchLog("🎉 최고 레벨(30)에 도달했습니다! 이제 당신은 진정한 전설이 되었습니다!", "log-levelup");
+        return;
+      }
+
       var nextLevelExp = getRequiredExp(boxerStats.level);
       if (boxerStats.experience >= nextLevelExp) {
         boxerStats.level += 1;
         boxerStats.attack += 5;
         boxerStats.defense += 5;
         var levelUpMessage = `레벨업! 공격력과 방어력이 5씩 증가했습니다! (${boxerStats.level-1} → ${boxerStats.level})`;
-        addMatchLog(levelUpMessage);
+        addMatchLog(levelUpMessage, "log-levelup");
+        
+        // 최고 레벨 도달 체크
+        if (boxerStats.level === 30) {
+          addMatchLog("🎉 최고 레벨(30)에 도달했습니다! 이제 당신은 진정한 전설이 되었습니다!", "log-levelup");
+        }
         
         // 스탯 정보 업데이트
         updateStatDisplay();
@@ -312,9 +323,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 경험치 획득 및 레벨업 체크 함수
     function gainExperience(expAmount) {
-      console.log("경험치 획득 전:", boxerStats.experience);
+      // 최고 레벨 체크
+      if (boxerStats.level >= 30) {
+        addMatchLog("최고 레벨에 도달했기 때문에 더 이상 경험치를 획득할 수 없습니다.", "log-exp");
+        return;
+      }
+
       boxerStats.experience += expAmount;
-      console.log("경험치 획득 후:", boxerStats.experience);
+      console.log("경험치 획득:", expAmount, "현재 경험치:", boxerStats.experience);
       
       // 스탯 저장
       saveStats();
