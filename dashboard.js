@@ -424,6 +424,10 @@ document.addEventListener("DOMContentLoaded", function() {
         addMatchLog(logMessage);
         
         if (result.won) {
+          // 연승 증가
+          boxerStats.winStreak++;
+          saveStats();
+
           // 경험치 획득
           var expGain = calculateExpGain(opponentAttack, opponentDefense, difficulty);
           if (boxerStats.expBoost) {
@@ -436,13 +440,13 @@ document.addEventListener("DOMContentLoaded", function() {
           var goldGain;
           switch(difficulty) {
             case 'easy':
-              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 5; // 기본 5-10 골드
+              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 5;
               break;
             case 'medium':
-              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 10; // 기본 10-20 골드
+              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 10;
               break;
             case 'hard':
-              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 15; // 기본 15-30 골드
+              goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 15;
               break;
             default:
               goldGain = Math.floor((opponentAttack + opponentDefense) / 20) * 5;
@@ -457,6 +461,10 @@ document.addEventListener("DOMContentLoaded", function() {
 
           difficultyWins[difficulty]++;
           saveDifficultyWins();
+        } else {
+          // 패배 시 연승 초기화
+          boxerStats.winStreak = 0;
+          saveStats();
         }
       }
     };
