@@ -13,7 +13,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 스탯 저장 함수
     function saveStats() {
-      localStorage.setItem("boxerStats", JSON.stringify(boxerStats));
+      try {
+        localStorage.setItem("boxerStats", JSON.stringify(boxerStats));
+        console.log("스탯 저장 완료:", boxerStats);
+      } catch (error) {
+        console.error("스탯 저장 실패:", error);
+      }
     }
 
     // 레벨별 필요 경험치 계산 함수
@@ -78,9 +83,6 @@ document.addEventListener("DOMContentLoaded", function() {
       expChart.update();
     }
 
-    // 초기 스탯 표시
-    updateStatDisplay();
-  
     // Chart.js로 스탯 그래프 그리기 (바 차트)
     var ctx = document.getElementById('statsChart').getContext('2d');
     var statsChart = new Chart(ctx, {
@@ -141,6 +143,9 @@ document.addEventListener("DOMContentLoaded", function() {
         }
       }
     });
+  
+    // 초기 스탯 표시
+    updateStatDisplay();
   
     // 경기 상대 데이터 생성
     // 쉬움 난이도: 유명한 복서 3명
@@ -243,6 +248,40 @@ document.addEventListener("DOMContentLoaded", function() {
     // 난이도별 승리 횟수 초기화
     loadDifficultyWins();
 
+    // 레벨업 함수
+    function checkLevelUp() {
+      var nextLevelExp = getRequiredExp(boxerStats.level);
+      if (boxerStats.experience >= nextLevelExp) {
+        boxerStats.level += 1;
+        boxerStats.attack += 5;
+        boxerStats.defense += 5;
+        var levelUpMessage = `레벨업! 공격력과 방어력이 5씩 증가했습니다! (${boxerStats.level-1} → ${boxerStats.level})`;
+        addMatchLog(levelUpMessage);
+        
+        // 스탯 정보 업데이트
+        updateStatDisplay();
+        
+        // 스탯 저장
+        saveStats();
+      }
+    }
+
+    // 경험치 획득 및 레벨업 체크 함수
+    function gainExperience(expAmount) {
+      console.log("경험치 획득 전:", boxerStats.experience);
+      boxerStats.experience += expAmount;
+      console.log("경험치 획득 후:", boxerStats.experience);
+      
+      // 스탯 저장
+      saveStats();
+      
+      // 스탯 정보 업데이트
+      updateStatDisplay();
+      
+      // 레벨업 체크
+      checkLevelUp();
+    }
+
     // 경기 결과 계산 함수
     function calculateMatchResult(playerStats, opponentStats) {
       var playerScore = (playerStats.attack * 0.6 + playerStats.defense * 0.4);
@@ -264,28 +303,6 @@ document.addEventListener("DOMContentLoaded", function() {
           message: "경기에서 패배했습니다. 더 강해져서 다시 도전하세요!",
           score: Math.round(opponentScore)
         };
-      }
-    }
-  
-    // 레벨업 함수
-    function checkLevelUp() {
-      var nextLevelExp = getRequiredExp(boxerStats.level);
-      if (boxerStats.experience >= nextLevelExp) {
-        boxerStats.level += 1;
-        boxerStats.attack += 5;
-        boxerStats.defense += 5;
-        var levelUpMessage = `레벨업! 공격력과 방어력이 5씩 증가했습니다! (${boxerStats.level-1} → ${boxerStats.level})`;
-        addMatchLog(levelUpMessage);
-        
-        // 스탯 정보 업데이트
-        updateStatDisplay();
-        
-        // 차트 업데이트
-        statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.level];
-        statsChart.update();
-
-        // 스탯 저장
-        saveStats();
       }
     }
   
@@ -345,24 +362,12 @@ document.addEventListener("DOMContentLoaded", function() {
         // 경험치 획득
         if (result.won) {
           var expGain = calculateExpGain(opponentAttack, opponentDefense, difficulty);
-          boxerStats.experience += expGain;
+          console.log("경험치 획득 시도:", expGain);
+          gainExperience(expGain);
           difficultyWins[difficulty]++;
           saveDifficultyWins();
           
           addMatchLog(`경험치 ${expGain} 획득! (난이도: ${difficulty})`);
-          
-          // 스탯 정보 업데이트
-          updateStatDisplay();
-          
-          // 차트 업데이트
-          statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.level];
-          statsChart.update();
-
-          // 스탯 저장
-          saveStats();
-          
-          // 레벨업 체크
-          checkLevelUp();
         }
       }
     };
