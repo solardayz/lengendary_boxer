@@ -73,10 +73,13 @@ document.addEventListener("DOMContentLoaded", function() {
       document.getElementById("statInfo").innerText = 
         "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
         "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
-        "경험치: " + boxerStats.experience + "/" + nextLevelExp + ", 레벨: " + boxerStats.level;
+        "경험치: " + boxerStats.experience + "/" + nextLevelExp;
+      
+      // 레벨 표시 업데이트
+      document.getElementById("levelNumber").innerText = boxerStats.level;
       
       // 차트 업데이트
-      statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.level];
+      statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense];
       statsChart.update();
       
       expChart.data.datasets[0].data = [boxerStats.experience, nextLevelExp];
@@ -88,14 +91,13 @@ document.addEventListener("DOMContentLoaded", function() {
     var statsChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['공격력', '방어력', '레벨'],
+        labels: ['공격력', '방어력'],
         datasets: [{
           label: '스탯',
-          data: [boxerStats.attack, boxerStats.defense, boxerStats.level],
+          data: [boxerStats.attack, boxerStats.defense],
           backgroundColor: [
             'rgba(255, 99, 132, 0.6)',
-            'rgba(54, 162, 235, 0.6)',
-            'rgba(75, 192, 192, 0.6)'
+            'rgba(54, 162, 235, 0.6)'
           ],
           borderWidth: 1
         }]

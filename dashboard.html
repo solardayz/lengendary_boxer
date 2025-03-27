@@ -101,6 +101,26 @@
       height: 300px;
       margin-bottom: 20px;
     }
+    .level-display {
+      text-align: center;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      min-width: 120px;
+    }
+    .level-label {
+      display: block;
+      font-size: 1.2em;
+      color: #feda4a;
+      margin-bottom: 5px;
+    }
+    .level-number {
+      display: block;
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
     @media (max-width: 768px) {
       .dashboard-title {
         font-size: 2em;
@@ -131,7 +151,13 @@
         <div class="card mb-4">
           <div class="card-body">
             <h5 class="card-title">스탯 정보</h5>
-            <p id="statInfo" class="stat-info"></p>
+            <div class="d-flex justify-content-between align-items-center">
+              <p id="statInfo" class="stat-info mb-0"></p>
+              <div class="level-display">
+                <span class="level-label">레벨</span>
+                <span id="levelNumber" class="level-number">1</span>
+              </div>
+            </div>
           </div>
         </div>
 
