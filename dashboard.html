@@ -197,11 +197,30 @@
         font-size: 1.8em;
       }
     }
+    .btn-danger {
+      background: linear-gradient(45deg, #dc3545, #c82333);
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      transition: all 0.3s ease;
+    }
+    .btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+    }
   </style>
 </head>
 <body class="text-light">
   <div class="container py-4">
     <h1 id="dashboardTitle" class="dashboard-title text-center">복서의 대시보드</h1>
+    
+    <div class="row mb-3">
+      <div class="col-12 text-end">
+        <button id="resetButton" class="btn btn-danger">
+          <i class="fas fa-trash"></i> 초기화
+        </button>
+      </div>
+    </div>
     
     <div class="row">
       <!-- 스탯 정보 -->

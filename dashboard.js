@@ -1,4 +1,21 @@
 document.addEventListener("DOMContentLoaded", function() {
+    // 초기화 버튼 이벤트 리스너
+    document.getElementById("resetButton").addEventListener("click", function() {
+      if (confirm("정말로 모든 데이터를 초기화하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+        // 로컬 스토리지 초기화
+        localStorage.removeItem("boxerName");
+        localStorage.removeItem("boxerStats");
+        localStorage.removeItem("matchLogs");
+        localStorage.removeItem("difficultyWins");
+        
+        // 초기화 완료 메시지
+        alert("모든 데이터가 초기화되었습니다.");
+        
+        // 초기 화면으로 이동
+        window.location.href = "index.html";
+      }
+    });
+
     // 로컬 스토리지에서 복서 이름 가져오기
     var boxerName = localStorage.getItem("boxerName") || "Unknown Boxer";
     document.getElementById("dashboardTitle").innerText = boxerName + "의 대시보드";
