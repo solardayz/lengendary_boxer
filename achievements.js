@@ -8,17 +8,29 @@ document.addEventListener("DOMContentLoaded", function() {
         gold: 0,
         inventory: [],
         purchasedItems: {},
-        achievements: {}, // 업적 데이터
+        achievements: {},
         difficultyWins: {
             easy: 0,
             medium: 0,
             hard: 0
-        }
+        },
+        winStreak: 0,
+        title: '신인 복서'
     };
 
     // 업적 데이터가 없는 경우 초기화
     if (!boxerStats.achievements) {
         boxerStats.achievements = {};
+    }
+
+    // winStreak가 없는 경우 초기화
+    if (!boxerStats.winStreak) {
+        boxerStats.winStreak = 0;
+    }
+
+    // title이 없는 경우 초기화
+    if (!boxerStats.title) {
+        boxerStats.title = '신인 복서';
     }
 
     // 업적 데이터 정의
@@ -72,7 +84,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 check: () => boxerStats.achievements.gold_1000 || boxerStats.gold >= 1000,
                 progress: () => Math.min((boxerStats.gold / 1000) * 100, 100),
                 rewardFunction: () => {
-                    boxerStats.title = '부자';
+                    boxerStats.title = '부자 복서';
                     addMatchLog('1000 골드 달성! 특별한 칭호를 획득했습니다.');
                 }
             },
@@ -85,7 +97,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 check: () => boxerStats.achievements.gold_10000 || boxerStats.gold >= 10000,
                 progress: () => Math.min((boxerStats.gold / 10000) * 100, 100),
                 rewardFunction: () => {
-                    boxerStats.title = '황금';
+                    boxerStats.title = '황금 복서';
                     addMatchLog('10000 골드 달성! 황금 칭호를 획득했습니다.');
                 }
             }
@@ -136,7 +148,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 description: '연속 5승을 달성하세요.',
                 icon: '🔥',
                 reward: '200 골드',
-                check: () => boxerStats.achievements.win_streak_5 || boxerStats.winStreak >= 5,
+                check: () => boxerStats.achievements.win_streak_5 || (boxerStats.winStreak && boxerStats.winStreak >= 5),
                 progress: () => Math.min((boxerStats.winStreak / 5) * 100, 100),
                 rewardFunction: () => {
                     boxerStats.gold += 200;
@@ -149,7 +161,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 description: '연속 10승을 달성하세요.',
                 icon: '⚡',
                 reward: '500 골드',
-                check: () => boxerStats.achievements.win_streak_10 || boxerStats.winStreak >= 10,
+                check: () => boxerStats.achievements.win_streak_10 || (boxerStats.winStreak && boxerStats.winStreak >= 10),
                 progress: () => Math.min((boxerStats.winStreak / 10) * 100, 100),
                 rewardFunction: () => {
                     boxerStats.gold += 500;
