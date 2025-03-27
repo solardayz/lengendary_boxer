@@ -16,6 +16,24 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
 
+    // 레벨 조정 버튼 이벤트 리스너
+    document.getElementById("adjustLevelButton").addEventListener("click", function() {
+      if (confirm("레벨을 30으로 조정하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+        // 레벨이 30을 초과하는 경우에만 조정
+        if (boxerStats.level > 30) {
+          boxerStats.level = 30;
+          // 스탯 저장
+          saveStats();
+          // 스탯 정보 업데이트
+          updateStatDisplay();
+          // 로그 추가
+          addMatchLog("레벨이 30으로 조정되었습니다.", "log-levelup");
+        } else {
+          alert("현재 레벨이 30 이하이므로 조정이 필요하지 않습니다.");
+        }
+      }
+    });
+
     // 로컬 스토리지에서 복서 이름 가져오기
     var boxerName = localStorage.getItem("boxerName") || "Unknown Boxer";
     document.getElementById("dashboardTitle").innerText = boxerName + "의 대시보드";
@@ -27,6 +45,15 @@ document.addEventListener("DOMContentLoaded", function() {
       experience: 0,
       level: 1
     };
+
+    // 30레벨 초과 체크 및 조정
+    if (boxerStats.level > 30) {
+      if (confirm("현재 레벨이 30을 초과합니다. 레벨을 30으로 조정하시겠습니까?")) {
+        boxerStats.level = 30;
+        saveStats();
+        addMatchLog("레벨이 30으로 조정되었습니다.", "log-levelup");
+      }
+    }
 
     // 스탯 저장 함수
     function saveStats() {
