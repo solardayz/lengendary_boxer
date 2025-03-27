@@ -45,8 +45,24 @@ document.addEventListener("DOMContentLoaded", function() {
       experience: 0,
       level: 1,
       gold: 0,
-      inventory: []
+      inventory: [],
+      purchasedItems: {},
+      achievements: {},
+      difficultyWins: {
+        easy: 0,
+        medium: 0,
+        hard: 0
+      }
     };
+
+    // difficultyWins가 없는 경우 초기화
+    if (!boxerStats.difficultyWins) {
+        boxerStats.difficultyWins = {
+            easy: 0,
+            medium: 0,
+            hard: 0
+        };
+    }
 
     // 30레벨 초과 체크 및 조정
     if (boxerStats.level > 30) {
