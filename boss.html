@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주말 보스전</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .boss-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .boss-card {
+            background: #2c3e50;
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .boss-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        .boss-story {
+            font-style: italic;
+            margin-bottom: 20px;
+            color: #bdc3c7;
+        }
+        .boss-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .stat-item {
+            background: #34495e;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .stat-label {
+            color: #95a5a6;
+            font-size: 14px;
+        }
+        .stat-value {
+            color: #ecf0f1;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .boss-rewards {
+            background: #34495e;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .reward-title {
+            color: #f1c40f;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .reward-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+            color: #ecf0f1;
+        }
+        .reward-item i {
+            margin-right: 10px;
+            color: #f1c40f;
+        }
+        .boss-timer {
+            text-align: center;
+            font-size: 18px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        .challenge-button {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .challenge-button:hover {
+            background: #c0392b;
+            transform: scale(1.02);
+        }
+        .challenge-button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .back-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-dark">
+    <div class="boss-container">
+        <h2 class="text-center text-white mb-4">주말 보스전</h2>
+        
+        <div class="boss-timer" id="bossTimer">
+            다음 보스 등장까지: <span id="timer">00:00:00</span>
+        </div>
+
+        <div class="boss-card" id="bossCard">
+            <div class="boss-title" id="bossName">로딩 중...</div>
+            <div class="boss-story" id="bossStory">보스의 이야기를 불러오는 중...</div>
+            
+            <div class="boss-stats">
+                <div class="stat-item">
+                    <div class="stat-label">공격력</div>
+                    <div class="stat-value" id="bossAttack">-</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">방어력</div>
+                    <div class="stat-value" id="bossDefense">-</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">체력</div>
+                    <div class="stat-value" id="bossHealth">-</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-label">특수 능력</div>
+                    <div class="stat-value" id="bossSpecial">-</div>
+                </div>
+            </div>
+
+            <div class="boss-rewards">
+                <div class="reward-title">보상</div>
+                <div class="reward-item">
+                    <i class="fas fa-coins"></i>
+                    <span id="goldReward">-</span>
+                </div>
+                <div class="reward-item">
+                    <i class="fas fa-star"></i>
+                    <span id="expReward">-</span>
+                </div>
+                <div class="reward-item">
+                    <i class="fas fa-gift"></i>
+                    <span id="specialReward">-</span>
+                </div>
+            </div>
+
+            <button class="challenge-button" id="challengeButton" onclick="challengeBoss()">
+                보스에게 도전하기
+            </button>
+        </div>
+
+        <div class="text-center back-button">
+            <button class="btn btn-primary" onclick="window.location.href='dashboard.html'">
+                <i class="fas fa-arrow-left"></i> 대시보드로 돌아가기
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="boss.js"></script>
+</body>
+</html> 
