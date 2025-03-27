@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // 레벨별 필요 경험치 계산 함수
     function getRequiredExp(level) {
-      return Math.floor(100 * Math.pow(1.5, level - 1));
+      return level * 10; // 1렙: 10, 2렙: 20, 3렙: 30, ...
     }
 
     // 레벨별 스탯 증가량 계산 함수
@@ -112,12 +112,28 @@ document.addEventListener("DOMContentLoaded", function() {
     // 경기 로그를 저장할 배열
     var matchLogs = [];
 
+    // 로그 저장 함수
+    function saveMatchLogs() {
+      localStorage.setItem("matchLogs", JSON.stringify(matchLogs));
+    }
+
+    // 로그 불러오기 함수
+    function loadMatchLogs() {
+      var saved = localStorage.getItem("matchLogs");
+      if (saved) {
+        matchLogs = JSON.parse(saved);
+      }
+    }
+
     // 로그 표시 함수
     function addMatchLog(message) {
       matchLogs.unshift(message); // 새로운 로그를 배열 앞에 추가
-      if (matchLogs.length > 10) { // 최대 10개 로그만 보관
+      if (matchLogs.length > 20) { // 최대 20개 로그만 보관
         matchLogs.pop();
       }
+      
+      // 로그 저장
+      saveMatchLogs();
       
       // 로그 화면 업데이트
       var logContainer = document.getElementById("matchLogs");
@@ -126,26 +142,46 @@ document.addEventListener("DOMContentLoaded", function() {
         var container = document.createElement("div");
         container.id = "matchLogs";
         container.className = "match-logs";
-        container.style.cssText = "height: 200px; overflow-y: auto; background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 5px;";
+        container.style.cssText = "height: 300px; overflow-y: auto; background: #f8f9fa; padding: 10px; margin: 10px 0; border-radius: 5px;";
         document.querySelector(".container").appendChild(container);
         logContainer = container;
       }
       
       logContainer.innerHTML = matchLogs.map(log => `<div>${log}</div>`).join("");
     }
-  
-    // 함수: 상대 데이터를 받아 테이블 생성
-    function renderOpponents(opponents, containerId) {
-      var container = document.getElementById(containerId);
-      var html = '<table class="table table-dark table-striped opponent-table">';
-      html += '<thead><tr><th>이름</th><th>공격력</th><th>방어력</th><th>선택</th></tr></thead><tbody>';
-      opponents.forEach(function(opp, index) {
-        html += '<tr><td>' + opp.name + '</td><td>' + opp.attack + ' (' + getStatRange(opp.attack) + ')</td><td>' + opp.defense + ' (' + getStatRange(opp.defense) + ')</td><td><button class="btn btn-primary btn-sm" onclick="startMatch(\'' + opp.name + '\', ' + opp.attack + ', ' + opp.defense + ')">선택</button></td></tr>';
-      });
-      html += '</tbody></table>';
-      container.innerHTML = html;
+
+    // 초기 로그 불러오기
+    loadMatchLogs();
+
+    // 로그 초기 표시
+    var logContainer = document.getElementById("matchLogs");
+    if (logContainer) {
+      logContainer.innerHTML = matchLogs.map(log => `<div>${log}</div>`).join("");
     }
   
+    // 난이도별 승리 횟수 추적
+    var difficultyWins = {
+      easy: 0,
+      medium: 0,
+      hard: 0
+    };
+
+    // 난이도별 승리 횟수 저장
+    function saveDifficultyWins() {
+      localStorage.setItem("difficultyWins", JSON.stringify(difficultyWins));
+    }
+
+    // 난이도별 승리 횟수 불러오기
+    function loadDifficultyWins() {
+      var saved = localStorage.getItem("difficultyWins");
+      if (saved) {
+        difficultyWins = JSON.parse(saved);
+      }
+    }
+
+    // 난이도별 승리 횟수 초기화
+    loadDifficultyWins();
+
     // 경기 결과 계산 함수
     function calculateMatchResult(playerStats, opponentStats) {
       var playerScore = (playerStats.attack * 0.6 + playerStats.defense * 0.4);
@@ -192,16 +228,51 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   
-    // 경험치 계산 함수
-    function calculateExpGain(opponentAttack, opponentDefense) {
-      var baseExp = 20; // 기본 경험치 증가
-      var difficultyBonus = Math.floor((opponentAttack + opponentDefense) / 10); // 난이도 보너스 증가
-      var expGain = baseExp + difficultyBonus;
-      return Math.max(expGain, 1);
+    // 난이도별 경험치 계산 함수
+    function calculateExpGain(opponentAttack, opponentDefense, difficulty) {
+      var baseExp;
+      switch(difficulty) {
+        case 'easy':
+          baseExp = 5;
+          break;
+        case 'medium':
+          baseExp = 10;
+          break;
+        case 'hard':
+          baseExp = 15;
+          break;
+        default:
+          baseExp = 5;
+      }
+      var difficultyBonus = Math.floor((opponentAttack + opponentDefense) / 20);
+      return baseExp + difficultyBonus;
+    }
+  
+    // 난이도 체크 함수
+    function checkDifficultyAccess(difficulty) {
+      switch(difficulty) {
+        case 'medium':
+          if (difficultyWins.easy < 3) {
+            alert("애송이 난이도의 복서 3명을 모두 이겨야 중급 난이도에 도전할 수 있습니다!");
+            return false;
+          }
+          break;
+        case 'hard':
+          if (difficultyWins.medium < 3) {
+            alert("중급 난이도의 복서 3명을 모두 이겨야 상급 난이도에 도전할 수 있습니다!");
+            return false;
+          }
+          break;
+      }
+      return true;
     }
   
     // 전역 스코프에서 경기 시작 함수 정의
-    window.startMatch = function(opponentName, opponentAttack, opponentDefense) {
+    window.startMatch = function(opponentName, opponentAttack, opponentDefense, difficulty) {
+      if (!checkDifficultyAccess(difficulty)) {
+        return;
+      }
+
       if (confirm(opponentName + "와(과) 경기를 하시겠습니까?")) {
         // 경기 진행 로직
         var result = calculateMatchResult(boxerStats, {attack: opponentAttack, defense: opponentDefense});
@@ -212,9 +283,12 @@ document.addEventListener("DOMContentLoaded", function() {
         
         // 경험치 획득
         if (result.won) {
-          var expGain = calculateExpGain(opponentAttack, opponentDefense);
+          var expGain = calculateExpGain(opponentAttack, opponentDefense, difficulty);
           boxerStats.experience += expGain;
-          addMatchLog(`경험치 ${expGain} 획득! (기본: 20, 난이도 보너스: ${expGain - 20})`);
+          difficultyWins[difficulty]++;
+          saveDifficultyWins();
+          
+          addMatchLog(`경험치 ${expGain} 획득! (난이도: ${difficulty})`);
           
           // 스탯 정보 업데이트
           updateStatDisplay();
@@ -232,9 +306,21 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     };
   
+    // 함수: 상대 데이터를 받아 테이블 생성
+    function renderOpponents(opponents, containerId, difficulty) {
+      var container = document.getElementById(containerId);
+      var html = '<table class="table table-dark table-striped opponent-table">';
+      html += '<thead><tr><th>이름</th><th>공격력</th><th>방어력</th><th>선택</th></tr></thead><tbody>';
+      opponents.forEach(function(opp, index) {
+        html += '<tr><td>' + opp.name + '</td><td>' + opp.attack + ' (' + getStatRange(opp.attack) + ')</td><td>' + opp.defense + ' (' + getStatRange(opp.defense) + ')</td><td><button class="btn btn-primary btn-sm" onclick="startMatch(\'' + opp.name + '\', ' + opp.attack + ', ' + opp.defense + ', \'' + difficulty + '\')">선택</button></td></tr>';
+      });
+      html += '</tbody></table>';
+      container.innerHTML = html;
+    }
+  
     // 각 난이도별 상대 렌더링
-    renderOpponents(easyOpponents, "easyOpponents");
-    renderOpponents(mediumOpponents, "mediumOpponents");
-    renderOpponents(hardOpponents, "hardOpponents");
+    renderOpponents(easyOpponents, "easyOpponents", "easy");
+    renderOpponents(mediumOpponents, "mediumOpponents", "medium");
+    renderOpponents(hardOpponents, "hardOpponents", "hard");
   });
   
