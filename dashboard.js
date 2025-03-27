@@ -135,14 +135,13 @@ document.addEventListener("DOMContentLoaded", function() {
       var nextLevelExp = getRequiredExp(boxerStats.level);
       
       // 스탯 정보 업데이트
-      document.getElementById("attackValue").textContent = boxerStats.attack;
-      document.getElementById("defenseValue").textContent = boxerStats.defense;
-      document.getElementById("levelValue").textContent = boxerStats.level;
-      document.getElementById("experienceValue").textContent = boxerStats.experience;
+      document.getElementById("attackStat").textContent = boxerStats.attack;
+      document.getElementById("defenseStat").textContent = boxerStats.defense;
+      document.getElementById("levelNumber").textContent = boxerStats.level;
+      document.getElementById("expStat").textContent = boxerStats.experience + "/" + nextLevelExp;
       document.getElementById("goldAmount").textContent = boxerStats.gold || 0;
       document.getElementById("attackRange").innerText = "(" + getStatRange(boxerStats.attack) + ")";
       document.getElementById("defenseRange").innerText = "(" + getStatRange(boxerStats.defense) + ")";
-      document.getElementById("expStat").innerText = boxerStats.experience + "/" + nextLevelExp;
       
       // 차트 업데이트
       statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense];
