@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", function() {
         purchasedItems: {} // 구매한 아이템 추적
     };
 
+    // purchasedItems가 없는 경우 초기화
+    if (!boxerStats.purchasedItems) {
+        boxerStats.purchasedItems = {};
+    }
+
     // 상점 아이템 데이터
     const shopItems = {
         potion: [
