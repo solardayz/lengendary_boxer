@@ -176,8 +176,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 description: '첫 번째 아이템을 구매하세요.',
                 icon: '🛍️',
                 reward: '50 골드',
-                check: () => boxerStats.achievements.first_item || Object.keys(boxerStats.purchasedItems).length > 0,
-                progress: () => Object.keys(boxerStats.purchasedItems).length > 0 ? 100 : 0,
+                check: () => boxerStats.achievements.first_item || (boxerStats.purchasedItems && Object.keys(boxerStats.purchasedItems).length > 0),
+                progress: () => (boxerStats.purchasedItems && Object.keys(boxerStats.purchasedItems).length > 0) ? 100 : 0,
                 rewardFunction: () => {
                     boxerStats.gold += 50;
                     addMatchLog('첫 아이템 구매! 50 골드를 획득했습니다.');
@@ -190,8 +190,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 icon: '🧪',
                 reward: '300 골드',
                 check: () => boxerStats.achievements.all_potions || 
-                    (boxerStats.purchasedItems.attack_potion && boxerStats.purchasedItems.defense_potion),
+                    (boxerStats.purchasedItems && boxerStats.purchasedItems.attack_potion && boxerStats.purchasedItems.defense_potion),
                 progress: () => {
+                    if (!boxerStats.purchasedItems) return 0;
                     const potions = ['attack_potion', 'defense_potion'];
                     const purchased = potions.filter(id => boxerStats.purchasedItems[id]).length;
                     return (purchased / potions.length) * 100;
@@ -208,8 +209,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 icon: '⚡',
                 reward: '200 골드',
                 check: () => boxerStats.achievements.all_buffs || 
-                    (boxerStats.purchasedItems.exp_boost && boxerStats.purchasedItems.gold_boost),
+                    (boxerStats.purchasedItems && boxerStats.purchasedItems.exp_boost && boxerStats.purchasedItems.gold_boost),
                 progress: () => {
+                    if (!boxerStats.purchasedItems) return 0;
                     const buffs = ['exp_boost', 'gold_boost'];
                     const purchased = buffs.filter(id => boxerStats.purchasedItems[id]).length;
                     return (purchased / buffs.length) * 100;
@@ -226,8 +228,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 icon: '🏆',
                 reward: '1000 골드',
                 check: () => boxerStats.achievements.all_titles || 
-                    Object.keys(boxerStats.purchasedItems).filter(id => id.endsWith('_title')).length >= 10,
+                    (boxerStats.purchasedItems && Object.keys(boxerStats.purchasedItems).filter(id => id.endsWith('_title')).length >= 10),
                 progress: () => {
+                    if (!boxerStats.purchasedItems) return 0;
                     const titles = Object.keys(boxerStats.purchasedItems).filter(id => id.endsWith('_title')).length;
                     return Math.min((titles / 10) * 100, 100);
                 },
