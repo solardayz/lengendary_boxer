@@ -6,7 +6,8 @@ document.addEventListener("DOMContentLoaded", function() {
         experience: 0,
         level: 1,
         gold: 0,
-        inventory: []
+        inventory: [],
+        purchasedItems: {} // 구매한 아이템 추적
     };
 
     // 상점 아이템 데이터
@@ -93,17 +94,20 @@ document.addEventListener("DOMContentLoaded", function() {
     function renderShopItems(category) {
         const items = shopItems[category];
         const container = document.getElementById('shopItems');
-        container.innerHTML = items.map(item => `
-            <div class="shop-item">
-                <div class="shop-item-name">${item.name}</div>
-                <div class="shop-item-price">${item.price} 골드</div>
-                <div class="shop-item-description">${item.description}</div>
-                <button class="btn btn-buy" onclick="purchaseItem('${item.id}')"
-                        ${boxerStats.gold < item.price ? 'disabled' : ''}>
-                    구매
-                </button>
-            </div>
-        `).join('');
+        container.innerHTML = items.map(item => {
+            const isPurchased = boxerStats.purchasedItems[item.id];
+            return `
+                <div class="shop-item">
+                    <div class="shop-item-name">${item.name}</div>
+                    <div class="shop-item-price">${item.price} 골드</div>
+                    <div class="shop-item-description">${item.description}</div>
+                    <button class="btn btn-buy" onclick="purchaseItem('${item.id}')"
+                            ${boxerStats.gold < item.price || isPurchased ? 'disabled' : ''}>
+                        ${isPurchased ? '구매 완료' : '구매'}
+                    </button>
+                </div>
+            `;
+        }).join('');
     }
 
     // 카테고리 버튼 이벤트 리스너
@@ -123,9 +127,10 @@ document.addEventListener("DOMContentLoaded", function() {
             if (item) break;
         }
 
-        if (item && boxerStats.gold >= item.price) {
+        if (item && boxerStats.gold >= item.price && !boxerStats.purchasedItems[item.id]) {
             if (confirm(`${item.name}을(를) ${item.price}골드에 구매하시겠습니까?`)) {
                 boxerStats.gold -= item.price;
+                boxerStats.purchasedItems[item.id] = true; // 구매 상태 저장
                 item.effect();
                 saveStats();
                 updateGoldDisplay();
