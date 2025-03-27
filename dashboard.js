@@ -146,12 +146,34 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
   
+    // 레벨업 함수
+    function checkLevelUp() {
+      var nextLevelExp = boxerStats.level * 100;
+      if (boxerStats.experience >= nextLevelExp) {
+        boxerStats.level += 1;
+        boxerStats.attack += 5;
+        boxerStats.defense += 5;
+        var levelUpMessage = `레벨업! 공격력과 방어력이 5씩 증가했습니다! (${boxerStats.level-1} → ${boxerStats.level})`;
+        addMatchLog(levelUpMessage);
+        
+        // 스탯 정보 업데이트
+        document.getElementById("statInfo").innerText = 
+          "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
+          "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
+          "경험치: " + boxerStats.experience + "/" + (boxerStats.level * 100) + ", 레벨: " + boxerStats.level;
+        
+        // 차트 업데이트
+        statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.experience, boxerStats.level];
+        statsChart.update();
+      }
+    }
+  
     // 경험치 계산 함수
     function calculateExpGain(opponentAttack, opponentDefense) {
-      var baseExp = 10;
-      var difficultyBonus = Math.floor((opponentAttack + opponentDefense) / 20);
+      var baseExp = 20; // 기본 경험치 증가
+      var difficultyBonus = Math.floor((opponentAttack + opponentDefense) / 10); // 난이도 보너스 증가
       var expGain = baseExp + difficultyBonus;
-      return Math.max(expGain, 1); // 최소 1의 경험치는 보장
+      return Math.max(expGain, 1);
     }
   
     // 전역 스코프에서 경기 시작 함수 정의
@@ -168,28 +190,11 @@ document.addEventListener("DOMContentLoaded", function() {
         if (result.won) {
           var expGain = calculateExpGain(opponentAttack, opponentDefense);
           boxerStats.experience += expGain;
-          addMatchLog(`경험치 ${expGain} 획득! (기본: 10, 난이도 보너스: ${expGain - 10})`);
+          addMatchLog(`경험치 ${expGain} 획득! (기본: 20, 난이도 보너스: ${expGain - 20})`);
           
           // 레벨업 체크
-          var nextLevelExp = boxerStats.level * 100;
-          if (boxerStats.experience >= nextLevelExp) {
-            boxerStats.level += 1;
-            boxerStats.attack += 5;
-            boxerStats.defense += 5;
-            var levelUpMessage = `레벨업! 공격력과 방어력이 5씩 증가했습니다! (${boxerStats.level-1} → ${boxerStats.level})`;
-            addMatchLog(levelUpMessage);
-          }
+          checkLevelUp();
         }
-        
-        // 스탯 정보 업데이트
-        document.getElementById("statInfo").innerText = 
-          "공격력: " + boxerStats.attack + " (" + getStatRange(boxerStats.attack) + "), " +
-          "방어력: " + boxerStats.defense + " (" + getStatRange(boxerStats.defense) + "), " +
-          "경험치: " + boxerStats.experience + "/" + (boxerStats.level * 100) + ", 레벨: " + boxerStats.level;
-        
-        // 차트 업데이트
-        statsChart.data.datasets[0].data = [boxerStats.attack, boxerStats.defense, boxerStats.experience, boxerStats.level];
-        statsChart.update();
       }
     };
   
